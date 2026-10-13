@@ -18,7 +18,7 @@ namespace Moreno_785_Proy1
         bool[] v_llamadasSubir = new bool[12], v_llamadasBajar = new bool[12];
 
         //Variables sueltas
-        int pisoAct = 0, destino = 0, direccion = 0;
+        int pisoAct = 0, destino = 0, dirY = 0;
         string estado = "detenido", atendiendo = "ninguno"; 
 
 /*==================================
@@ -96,6 +96,45 @@ namespace Moreno_785_Proy1
             v_llamadasSubir[piso] = true;
             tmp.BackColor = c_activo;
         }
+        private void revisarSubida() 
+        {
+            int pisoMayor = -1, pisoMenor = -1;
+
+            for (int i = 0; i < v_llamadasSubir.Length; i++)
+            {
+                if (v_llamadasSubir[i])
+                {
+                    if (pisoMenor == -1)
+                    {
+                        pisoMenor = i;
+                    }
+                    pisoMayor = i;
+                }
+            }
+
+            if (pisoMayor != -1)
+            {
+                atendiendo = "subir";
+
+                if (pisoMayor > pisoAct)
+                {
+                    destino = pisoMayor;
+                    dirY = 1;
+                }
+                else if (pisoMenor < pisoAct)
+                {
+                    destino = pisoMenor;
+                    dirY = -1;
+                }
+                else
+                {
+                    destino = pisoAct;
+                    dirY = 0;
+                }
+            }
+        }
+
+
 
 /*=================================
 ===================================
