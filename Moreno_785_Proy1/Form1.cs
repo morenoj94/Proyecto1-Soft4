@@ -11,22 +11,21 @@ namespace Moreno_785_Proy1
         //Elementos generales
         Button btn_subir, btn_bajar, btn_elevador = new Button();
         Label lbl_piso;
-        int estado = 0, pisoActual = 0, destino = 0;
 
         //Vectores
         Button[] v_btn_subir = new Button[12], v_btn_bajar = new Button[12];
         Label[] v_lbl_piso = new Label[13];
-        bool[] v_llamadasSubir = new bool[13], v_llamadasBajar = new bool[13];
+        bool[] v_llamadasSubir = new bool[12], v_llamadasBajar = new bool[12];
 
         //Variables sueltas
-        int dirY = 0;
-        //bool llamadaBajar, llamadaSubir;
+        int pisoAct = 0, destino = 0, direccion = 0;
+        string estado = "detenido", atendiendo = "ninguno"; 
 
-        /*=================================
-         * ================================
-                Inicia el programa.
-        ===================================
-        ===================================*/
+/*==================================
+====================================
+======== Inicia el programa. =======
+====================================
+====================================*/
 
         public Form1()
         {
@@ -41,6 +40,7 @@ namespace Moreno_785_Proy1
                 btn_subir.Size = new Size(60, 25);
                 btn_subir.Location = new Point(115, 430 - (30 * i));
                 btn_subir.Text = "Subir";
+                btn_subir.Tag = i;
                 btn_subir.Click += Btn_subir_Click;
 
                 v_btn_subir[i] = btn_subir;
@@ -50,6 +50,7 @@ namespace Moreno_785_Proy1
                 btn_bajar.Size = new Size(60, 25);
                 btn_bajar.Location = new Point(210, 400 - (30 * i));
                 btn_bajar.Text = "Bajar";
+                btn_bajar.Tag = i+1;
                 btn_bajar.Click += Btn_bajar_Click;
 
                 v_btn_bajar[i] = btn_bajar;
@@ -70,10 +71,6 @@ namespace Moreno_785_Proy1
                 v_lbl_piso[i] = lbl_piso;
 
                 this.Controls.Add(lbl_piso);
-
-                //cargo los vectores de llamada con false
-                v_llamadasSubir[i] = false;
-                v_llamadasBajar[i] = false;
             }
 
             btn_elevador.Size = new Size(40, 25);
@@ -85,23 +82,46 @@ namespace Moreno_785_Proy1
         }
 
 
-        /*=================================
-        ===================================
-        ======= Logica para subir. ========
-        ===================================
-        ===================================*/
+/*=================================
+===================================
+======= Logica para subir. ========
+===================================
+===================================*/
+        private void Btn_subir_Click(object? sender, EventArgs e)
+        {
+            Button tmp = (Button)sender;
 
+            int piso = (int)tmp.Tag;
+
+            v_llamadasSubir[piso] = true;
+            tmp.BackColor = c_activo;
+        }
+
+/*=================================
+===================================
+======= Logica para bajar. ========
+===================================
+===================================*/
+        private void Btn_bajar_Click(object? sender, EventArgs e)
+        {
+            Button tmp = sender as Button;
+
+            int piso = (int)tmp.Tag;
+
+            v_llamadasBajar[piso] = true;
+            tmp.BackColor = c_activo;
+        }
+
+/*====================================
+======================================
+======== Sin Actualizar ==============
+======================================
+======================================*/
         private void tmr_verificar_Tick(object sender, EventArgs e)
         {
             verificarsubir();
             verificarbajar();
 
-        }
-        private void Btn_subir_Click(object? sender, EventArgs e)
-        {
-            Button btn_tmp = sender as Button;
-
-            btn_tmp.BackColor = c_activo;
         }
         private void verificarsubir()
         {
@@ -170,17 +190,6 @@ namespace Moreno_785_Proy1
         }
 
 
-        /*=================================
-         ==================================
-                Logica para bajar.
-        ===================================
-        ===================================*/
-        private void Btn_bajar_Click(object? sender, EventArgs e)
-        {
-            Button btn_tmp = sender as Button;
-
-            btn_tmp.BackColor = c_activo;
-        }
         private void verificarbajar()
         {
             bool llamadaBajar = false;
@@ -239,11 +248,6 @@ namespace Moreno_785_Proy1
 
 
 
-        /*====================================
-         * ===================================
-         * ===== Sin Actualizar ==============
-         * ===================================
-         * ===================================*/
 
 
         private void compararPiso(int y)
