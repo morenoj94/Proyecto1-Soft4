@@ -19,13 +19,13 @@ namespace Moreno_785_Proy1
 
         //Variables sueltas
         int pisoAct = 0, destino = 0, dirY = 0;
-        string estado = "detenido", atendiendo = "ninguno"; 
+        string estado = "detenido", atendiendo = "ninguno";
 
-/*==================================
-====================================
-======== Inicia el programa. =======
-====================================
-====================================*/
+        /*==================================
+        ====================================
+        ======== Inicia el programa. =======
+        ====================================
+        ====================================*/
 
         public Form1()
         {
@@ -50,7 +50,7 @@ namespace Moreno_785_Proy1
                 btn_bajar.Size = new Size(60, 25);
                 btn_bajar.Location = new Point(210, 400 - (30 * i));
                 btn_bajar.Text = "Bajar";
-                btn_bajar.Tag = i+1;
+                btn_bajar.Tag = i + 1;
                 btn_bajar.Click += Btn_bajar_Click;
 
                 v_btn_bajar[i] = btn_bajar;
@@ -80,13 +80,50 @@ namespace Moreno_785_Proy1
 
             this.Controls.Add(btn_elevador);
         }
+        private void tmr_mover_Tick(object sender, EventArgs e)
+        {
+            int x, y, piso;
+            x = btn_elevador.Location.X;
+            y = btn_elevador.Location.Y;
+
+            piso = (430 - y) / 30;
 
 
-/*=================================
-===================================
-======= Logica para subir. ========
-===================================
-===================================*/
+            btn_elevador.Location = new Point(x, y + dirY);
+
+            if (v_llamadasSubir[piso])
+            {
+                dirY = 0;
+
+                btn_elevador.BackColor = c_esperando;
+                v_btn_subir[piso].BackColor = c_inactivo;
+                v_llamadasSubir[piso] = false;
+
+                tmr_esperar.Start();
+            }
+
+            compararPiso(y);
+
+            if (btn_elevador.Location.Y == 430 || btn_elevador.Location.Y == 70)
+            {
+                dirY = -dirY;
+            }
+
+
+        }
+        private void tmr_esperar_Tick(object sender, EventArgs e)
+        {
+            tmr_esperar.Stop();
+            btn_elevador.BackColor = c_activo;
+            //estado = ;
+        }
+
+
+        /*=================================
+        ===================================
+        ======= Logica para subir. ========
+        ===================================
+        ===================================*/
         private void Btn_subir_Click(object? sender, EventArgs e)
         {
             Button tmp = (Button)sender;
@@ -96,7 +133,7 @@ namespace Moreno_785_Proy1
             v_llamadasSubir[piso] = true;
             tmp.BackColor = c_activo;
         }
-        private void revisarSubida() 
+        private void revisarSubida()
         {
             int pisoMayor = -1, pisoMenor = -1;
 
@@ -115,6 +152,7 @@ namespace Moreno_785_Proy1
             if (pisoMayor != -1)
             {
                 atendiendo = "subir";
+                txt_atendiendo.Text = atendiendo;
 
                 if (pisoMayor > pisoAct)
                 {
@@ -134,13 +172,24 @@ namespace Moreno_785_Proy1
             }
         }
 
+        private void subir()
+        {
+            estado = "subiendo";
+            txt_estado.Text = estado;
+
+            btn_elevador.BackColor = c_moviendo;
+            dirY = -1;
+
+            tmr_mover.Start();
+        }
 
 
-/*=================================
-===================================
-======= Logica para bajar. ========
-===================================
-===================================*/
+
+        /*=================================
+        ===================================
+        ======= Logica para bajar. ========
+        ===================================
+        ===================================*/
         private void Btn_bajar_Click(object? sender, EventArgs e)
         {
             Button tmp = sender as Button;
@@ -151,144 +200,18 @@ namespace Moreno_785_Proy1
             tmp.BackColor = c_activo;
         }
 
-/*====================================
-======================================
-======== Sin Actualizar ==============
-======================================
-======================================*/
+        /*====================================
+        ======================================
+        ======== Sin Actualizar ==============
+        ======================================
+        ======================================*/
         private void tmr_verificar_Tick(object sender, EventArgs e)
         {
-            verificarsubir();
-            verificarbajar();
+            //verificarsubir();
+            //verificarbajar();
 
         }
-        private void verificarsubir()
-        {
-            bool llamadaSubir = false;
-
-            for (int i = 0; i < v_btn_subir.Length; i++)
-            {
-                if (v_btn_subir[i].BackColor == c_activo)
-                {
-                    v_llamadasSubir[i] = true;
-
-                    if (i > pisoActual)
-                    { 
-                        destino = i;
-                        llamadaSubir = true;
-                    }
-                }
-                else
-                    v_llamadasSubir[i] = false;
-            }
-            if (llamadaSubir && estado == 0)
-            {
-                estado = 1;
-                subir();
-            }
-        }
-        private void subir()
-        {
-
-            dirY = -1;
-            btn_elevador.BackColor = c_moviendo;
-            txt_estado.Text = "Subiendo";
-            tmr_subir.Start();
-        }
-        private void tmr_subir_Tick(object sender, EventArgs e)
-        {
-            int x, y, piso;
-            x = btn_elevador.Location.X;
-            y = btn_elevador.Location.Y;
-
-            piso = (430 - y) / 30;
-            pisoActual = piso;
-
-            btn_elevador.Text = piso.ToString();
-
-            btn_elevador.Location = new Point(x, y + dirY);
-
-            if (v_llamadasSubir[piso])
-            {
-                tmr_subir.Stop();
-                dirY = 0;
-
-                btn_elevador.BackColor = c_esperando;
-                v_btn_subir[piso].BackColor = c_inactivo;
-                v_llamadasSubir[piso] = false;
-
-                tmr_esperar.Start();
-            }
-
-        }
-        private void tmr_esperar_Tick(object sender, EventArgs e)
-        {
-            tmr_esperar.Stop();
-            //btn_elevador.BackColor = c_activo;
-            estado = 0;
-        }
-
-
-        private void verificarbajar()
-        {
-            bool llamadaBajar = false;
-
-            for (int i = pisoActual - 1; i >= 0; i--)
-            {
-                if (v_btn_bajar[i].BackColor == c_activo)
-                {
-                    v_llamadasBajar[i] = true;
-                    llamadaBajar = true;
-                }
-                else
-                    v_llamadasBajar[i] = false;
-
-            }
-            if (llamadaBajar && estado == 0)
-            {
-                estado = 1;
-                bajar();
-            }
-        }
-        private void bajar()
-        {
-            dirY = 1;
-            btn_elevador.BackColor = c_moviendo;
-            txt_estado.Text = "bajando";
-            tmr_bajar.Start();
-        }
-        private void tmr_bajar_Tick(object sender, EventArgs e)
-        {
-            int x, y, piso, p;
-            x = btn_elevador.Location.X;
-            y = btn_elevador.Location.Y;
-
-            piso = (430 - y) / 30;
-            p = (430 + 29 - y) / 30;
-            pisoActual = piso;
-
-            btn_elevador.Text = p.ToString();
-
-            btn_elevador.Location = new Point(x, y + dirY);
-
-            if (v_llamadasBajar[piso] == true)
-            {
-                tmr_bajar.Stop();
-                dirY = 0;
-
-                btn_elevador.BackColor = c_esperando;
-                v_btn_bajar[piso].BackColor = c_inactivo;
-                v_llamadasBajar[piso] = false;
-
-                tmr_esperar.Start();
-            }
-        }
-
-
-
-
-
-
+     
         private void compararPiso(int y)
         {
             int piso;
@@ -309,33 +232,7 @@ namespace Moreno_785_Proy1
         }
 
         //Para pruebas
-        private void btn_iniciar_Click(object sender, EventArgs e)
-        {
-            dirY = -1;
-            tmr_mover.Start();
-        }
-        private void btn_parar_Click(object sender, EventArgs e)
-        {
-            dirY = 0;
-            tmr_mover.Stop();
-        }
-        private void tmr_mover_Tick(object sender, EventArgs e)
-        {
-            int x, y;
-            x = btn_elevador.Location.X;
-            y = btn_elevador.Location.Y;
 
-            btn_elevador.Location = new Point(x, y + dirY);
-
-            compararPiso(y);
-
-            if (btn_elevador.Location.Y == 430 || btn_elevador.Location.Y == 70)
-            {
-                dirY = -dirY;
-            }
-
-
-        }
 
         /*
         private void verificarsubir()

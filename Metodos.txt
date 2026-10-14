@@ -1,0 +1,13 @@
+Método			    Cuándo se utiliza				     Dirección
+
+=================================
+	botones de subir
+=================================
+subir()			    Atiende llamadas de subir			     Sube
+bajarBuscarSubidas()	    Busca llamadas de subir que quedaron debajo	     Baja
+
+=================================
+	botones de bajar
+=================================
+bajar()			    Atiende llamadas de bajar			     Baja
+subirBuscarBajadas()	    Busca llamadas de bajar que quedaron arriba	     Sube

@@ -45,15 +45,13 @@
             rb_mantenimiento = new RadioButton();
             rb_apagado = new RadioButton();
             rb_encendido = new RadioButton();
-            btn_iniciar = new Button();
             tmr_mover = new System.Windows.Forms.Timer(components);
-            btn_parar = new Button();
             lbl_estado = new Label();
             txt_estado = new TextBox();
             tmr_verificar = new System.Windows.Forms.Timer(components);
-            tmr_subir = new System.Windows.Forms.Timer(components);
-            tmr_bajar = new System.Windows.Forms.Timer(components);
             tmr_esperar = new System.Windows.Forms.Timer(components);
+            txt_atendiendo = new TextBox();
+            lbl_atendiendo = new Label();
             grb_rango.SuspendLayout();
             grb_pisos.SuspendLayout();
             grb_estado.SuspendLayout();
@@ -216,30 +214,10 @@
             rb_encendido.Text = "Encendido";
             rb_encendido.UseVisualStyleBackColor = true;
             // 
-            // btn_iniciar
-            // 
-            btn_iniciar.Location = new Point(610, 266);
-            btn_iniciar.Name = "btn_iniciar";
-            btn_iniciar.Size = new Size(94, 29);
-            btn_iniciar.TabIndex = 7;
-            btn_iniciar.Text = "Iniciar";
-            btn_iniciar.UseVisualStyleBackColor = true;
-            btn_iniciar.Click += btn_iniciar_Click;
-            // 
             // tmr_mover
             // 
             tmr_mover.Interval = 50;
             tmr_mover.Tick += tmr_mover_Tick;
-            // 
-            // btn_parar
-            // 
-            btn_parar.Location = new Point(610, 301);
-            btn_parar.Name = "btn_parar";
-            btn_parar.Size = new Size(94, 29);
-            btn_parar.TabIndex = 8;
-            btn_parar.Text = "Parar";
-            btn_parar.UseVisualStyleBackColor = true;
-            btn_parar.Click += btn_parar_Click;
             // 
             // lbl_estado
             // 
@@ -252,7 +230,7 @@
             // 
             // txt_estado
             // 
-            txt_estado.Location = new Point(72, 492);
+            txt_estado.Location = new Point(105, 492);
             txt_estado.Name = "txt_estado";
             txt_estado.Size = new Size(75, 27);
             txt_estado.TabIndex = 10;
@@ -263,30 +241,36 @@
             tmr_verificar.Interval = 50;
             tmr_verificar.Tick += tmr_verificar_Tick;
             // 
-            // tmr_subir
-            // 
-            tmr_subir.Interval = 50;
-            tmr_subir.Tick += tmr_subir_Tick;
-            // 
-            // tmr_bajar
-            // 
-            tmr_bajar.Interval = 50;
-            tmr_bajar.Tick += tmr_bajar_Tick;
-            // 
             // tmr_esperar
             // 
             tmr_esperar.Interval = 3000;
             tmr_esperar.Tick += tmr_esperar_Tick;
+            // 
+            // txt_atendiendo
+            // 
+            txt_atendiendo.Location = new Point(105, 525);
+            txt_atendiendo.Name = "txt_atendiendo";
+            txt_atendiendo.Size = new Size(75, 27);
+            txt_atendiendo.TabIndex = 12;
+            // 
+            // lbl_atendiendo
+            // 
+            lbl_atendiendo.AutoSize = true;
+            lbl_atendiendo.Location = new Point(12, 528);
+            lbl_atendiendo.Name = "lbl_atendiendo";
+            lbl_atendiendo.Size = new Size(87, 20);
+            lbl_atendiendo.TabIndex = 11;
+            lbl_atendiendo.Text = "Atendiendo";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1013, 633);
+            Controls.Add(txt_atendiendo);
+            Controls.Add(lbl_atendiendo);
             Controls.Add(txt_estado);
             Controls.Add(lbl_estado);
-            Controls.Add(btn_parar);
-            Controls.Add(btn_iniciar);
             Controls.Add(grb_estado);
             Controls.Add(grb_pisos);
             Controls.Add(grb_rango);
@@ -321,14 +305,12 @@
         private RadioButton rb_mantenimiento;
         private RadioButton rb_apagado;
         private RadioButton rb_encendido;
-        private Button btn_iniciar;
         private System.Windows.Forms.Timer tmr_mover;
-        private Button btn_parar;
         private Label lbl_estado;
         private TextBox txt_estado;
         private System.Windows.Forms.Timer tmr_verificar;
-        private System.Windows.Forms.Timer tmr_subir;
-        private System.Windows.Forms.Timer tmr_bajar;
         private System.Windows.Forms.Timer tmr_esperar;
+        private TextBox txt_atendiendo;
+        private Label lbl_atendiendo;
     }
 }
