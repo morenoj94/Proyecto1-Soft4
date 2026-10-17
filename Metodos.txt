@@ -11,3 +11,7 @@ bajarBuscarSubidas()	    Busca llamadas de subir que quedaron debajo	     Baja
 =================================
 bajar()			    Atiende llamadas de bajar			     Baja
 subirBuscarBajadas()	    Busca llamadas de bajar que quedaron arriba	     Sube
+
+
+
+

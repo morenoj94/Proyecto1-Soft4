@@ -20,6 +20,7 @@ namespace Moreno_785_Proy1
         //Variables sueltas
         int pisoAct = 0, destino = 0, dirY = 0;
         string estado = "detenido", atendiendo = "ninguno";
+        int pisoMayor = -1, pisoMenor = -1;
 
         /*==================================
         ====================================
@@ -80,42 +81,76 @@ namespace Moreno_785_Proy1
 
             this.Controls.Add(btn_elevador);
         }
+        private void tmr_verificar_Tick(object sender, EventArgs e)
+        {
+            revisarSubida();
+            //verificarsubir();
+            //verificarbajar();
+
+        }
         private void tmr_mover_Tick(object sender, EventArgs e)
         {
             int x, y, piso;
             x = btn_elevador.Location.X;
             y = btn_elevador.Location.Y;
 
-            piso = (430 - y) / 30;
+            calcularPiso();
 
-
+            btn_elevador.BackColor = c_moviendo;
             btn_elevador.Location = new Point(x, y + dirY);
+            
+            if (atendiendo == "subir" && estado == "bajando")
+                buscarpiso();
+            else if (estado == "subiendo" && v_llamadasSubir[pisoAct])
+                detenerPiso();
 
-            if (v_llamadasSubir[piso])
+
+        }
+        private void calcularPiso()
+        {
+            int y = btn_elevador.Location.Y;
+
+
+            if (estado == "subiendo")
             {
+                if ((430 - y) % 30 == 0)
+                    pisoAct = (430 - y) / 30;
+            }
+            else if (estado == "bajando")
+            {
+                if ((430 - 30 - y) % 30 == 0)
+                    pisoAct = (430 + 29 - y) / 30;
+            }
+
+
+            btn_elevador.Text = pisoAct.ToString();
+        }
+        private void detenerPiso()
+        {
+                tmr_mover.Stop();
                 dirY = 0;
+                estado = "detenido";
+                txt_estado.Text = estado;
 
                 btn_elevador.BackColor = c_esperando;
-                v_btn_subir[piso].BackColor = c_inactivo;
-                v_llamadasSubir[piso] = false;
+                v_btn_subir[pisoAct].BackColor = c_inactivo;
+                v_llamadasSubir[pisoAct] = false;
 
                 tmr_esperar.Start();
-            }
-
-            compararPiso(y);
-
-            if (btn_elevador.Location.Y == 430 || btn_elevador.Location.Y == 70)
+                tmr_verificar.Stop();
+        }
+        private void buscarpiso() 
+        {
+            if (pisoAct == pisoMenor)
             {
-                dirY = -dirY;
+                detenerPiso();
             }
-
-
         }
         private void tmr_esperar_Tick(object sender, EventArgs e)
         {
             tmr_esperar.Stop();
-            btn_elevador.BackColor = c_activo;
-            //estado = ;
+            tmr_verificar.Start();
+
         }
 
 
@@ -135,51 +170,66 @@ namespace Moreno_785_Proy1
         }
         private void revisarSubida()
         {
-            int pisoMayor = -1, pisoMenor = -1;
+            pisoMayor = -1;
+            pisoMenor = -1;
 
             for (int i = 0; i < v_llamadasSubir.Length; i++)
             {
                 if (v_llamadasSubir[i])
                 {
+
                     if (pisoMenor == -1)
                     {
+                        atendiendo = "subir";
+                        txt_atendiendo.Text = atendiendo;
                         pisoMenor = i;
+                        txt_menor.Text = pisoMenor.ToString();
                     }
                     pisoMayor = i;
+                    txt_mayor.Text = pisoMayor.ToString();
                 }
             }
-
-            if (pisoMayor != -1)
+            definirDireccion();
+        }
+        private void definirDireccion()
+        {
+            if (atendiendo == "subir" && pisoMayor != -1)
             {
-                atendiendo = "subir";
-                txt_atendiendo.Text = atendiendo;
+                if (estado == "detenido")
+                {
+                    if (pisoMayor > pisoAct )
+                    {
+                        //destino = pisoMayor;
+                        dirY = -1;
+                        estado = "subiendo";
+                        txt_estado.Text = estado;
+                        subir();
+                    }
+                    else if (pisoMayor < pisoAct)
+                    {
+                        //destino = pisoMenor;
+                        dirY = 1;
+                        estado = "bajando";
+                        txt_estado.Text = estado;
+                        subir();
+                    }
+                    else if (pisoMayor == -1)
+                    {
+                        //destino = pisoAct;
+                        dirY = 0;
+                    }
+                }
+                txt_destino.Text = destino.ToString();
 
-                if (pisoMayor > pisoAct)
-                {
-                    destino = pisoMayor;
-                    dirY = 1;
-                }
-                else if (pisoMenor < pisoAct)
-                {
-                    destino = pisoMenor;
-                    dirY = -1;
-                }
-                else
-                {
-                    destino = pisoAct;
-                    dirY = 0;
-                }
             }
+            else
+                atendiendo = "ninguno";
         }
 
         private void subir()
         {
-            estado = "subiendo";
-            txt_estado.Text = estado;
 
             btn_elevador.BackColor = c_moviendo;
-            dirY = -1;
-
             tmr_mover.Start();
         }
 
@@ -194,7 +244,7 @@ namespace Moreno_785_Proy1
         {
             Button tmp = sender as Button;
 
-            int piso = (int)tmp.Tag;
+            int piso = ((int)tmp.Tag - 1);
 
             v_llamadasBajar[piso] = true;
             tmp.BackColor = c_activo;
@@ -205,13 +255,7 @@ namespace Moreno_785_Proy1
         ======== Sin Actualizar ==============
         ======================================
         ======================================*/
-        private void tmr_verificar_Tick(object sender, EventArgs e)
-        {
-            //verificarsubir();
-            //verificarbajar();
 
-        }
-     
         private void compararPiso(int y)
         {
             int piso;
@@ -288,7 +332,6 @@ namespace Moreno_785_Proy1
             {
                 estado = 1;
                 bajar();
-            }
         }
 
 

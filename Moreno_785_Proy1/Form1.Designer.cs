@@ -52,6 +52,14 @@
             tmr_esperar = new System.Windows.Forms.Timer(components);
             txt_atendiendo = new TextBox();
             lbl_atendiendo = new Label();
+            txt_menor = new TextBox();
+            label1 = new Label();
+            txt_mayor = new TextBox();
+            label2 = new Label();
+            txt_destino = new TextBox();
+            label3 = new Label();
+            txt_pisoAct = new TextBox();
+            label4 = new Label();
             grb_rango.SuspendLayout();
             grb_pisos.SuspendLayout();
             grb_estado.SuspendLayout();
@@ -262,11 +270,83 @@
             lbl_atendiendo.TabIndex = 11;
             lbl_atendiendo.Text = "Atendiendo";
             // 
+            // txt_menor
+            // 
+            txt_menor.Location = new Point(318, 528);
+            txt_menor.Name = "txt_menor";
+            txt_menor.Size = new Size(75, 27);
+            txt_menor.TabIndex = 16;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(225, 531);
+            label1.Name = "label1";
+            label1.Size = new Size(52, 20);
+            label1.TabIndex = 15;
+            label1.Text = "menor";
+            // 
+            // txt_mayor
+            // 
+            txt_mayor.Location = new Point(318, 495);
+            txt_mayor.Name = "txt_mayor";
+            txt_mayor.Size = new Size(75, 27);
+            txt_mayor.TabIndex = 14;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(225, 498);
+            label2.Name = "label2";
+            label2.Size = new Size(51, 20);
+            label2.TabIndex = 13;
+            label2.Text = "mayor";
+            // 
+            // txt_destino
+            // 
+            txt_destino.Location = new Point(318, 561);
+            txt_destino.Name = "txt_destino";
+            txt_destino.Size = new Size(75, 27);
+            txt_destino.TabIndex = 18;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(225, 564);
+            label3.Name = "label3";
+            label3.Size = new Size(60, 20);
+            label3.TabIndex = 17;
+            label3.Text = "Destino";
+            // 
+            // txt_pisoAct
+            // 
+            txt_pisoAct.Location = new Point(105, 557);
+            txt_pisoAct.Name = "txt_pisoAct";
+            txt_pisoAct.Size = new Size(75, 27);
+            txt_pisoAct.TabIndex = 20;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(12, 560);
+            label4.Name = "label4";
+            label4.Size = new Size(82, 20);
+            label4.TabIndex = 19;
+            label4.Text = "Piso Actual";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1013, 633);
+            Controls.Add(txt_pisoAct);
+            Controls.Add(label4);
+            Controls.Add(txt_destino);
+            Controls.Add(label3);
+            Controls.Add(txt_menor);
+            Controls.Add(label1);
+            Controls.Add(txt_mayor);
+            Controls.Add(label2);
             Controls.Add(txt_atendiendo);
             Controls.Add(lbl_atendiendo);
             Controls.Add(txt_estado);
@@ -312,5 +392,13 @@
         private System.Windows.Forms.Timer tmr_esperar;
         private TextBox txt_atendiendo;
         private Label lbl_atendiendo;
+        private TextBox txt_menor;
+        private Label label1;
+        private TextBox txt_mayor;
+        private Label label2;
+        private TextBox txt_destino;
+        private Label label3;
+        private TextBox txt_pisoAct;
+        private Label label4;
     }
 }
